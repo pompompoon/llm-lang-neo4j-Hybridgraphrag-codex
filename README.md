@@ -13,6 +13,8 @@ GraphSAGE に加えて GAT（Graph Attention Network）も選択できる。Web 
 <img width="1423" height="813" alt="image" src="https://github.com/user-attachments/assets/0dba4397-6078-4b2b-b6de-62a08c02e7e2" />
 <img width="1209" height="818" alt="image" src="https://github.com/user-attachments/assets/1df3bbfd-ed5e-4602-8857-aa889b1c71b3" />
 <img width="1586" height="821" alt="image" src="https://github.com/user-attachments/assets/03185c7a-6dc1-4a9a-81d0-aa496cc25a68" />
+<img width="1866" height="916" alt="image" src="https://github.com/user-attachments/assets/53ccaba9-b4f0-44c7-90fc-dcf92d52237e" />
+
 
 
 
