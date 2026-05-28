@@ -5,15 +5,6 @@
 知識グラフのエンティティを「テキストの意味」だけでなく「グラフ構造上の位置」も反映したベクトルで表現し、ハイブリッド検索・リンク予測（グラフ補完）を実現する。
 
 GraphSAGE に加えて GAT（Graph Attention Network）も選択できる。Web UI のセットアップ欄で `GraphSAGE` / `GAT` を切り替えて学習できる。
-■WEB画面
-<img width="1896" height="820" alt="image" src="https://github.com/user-attachments/assets/7f2d7843-a201-4700-876b-7ca8bfaf42a1" />
-<img width="1912" height="819" alt="image" src="https://github.com/user-attachments/assets/a51f4114-a1ad-4e16-b197-c21a58e8f4f7" />
-<img width="1913" height="834" alt="image" src="https://github.com/user-attachments/assets/8d0d141d-a41f-4251-8095-400a71f5316e" />
-<img width="1903" height="828" alt="image" src="https://github.com/user-attachments/assets/6a293e26-c490-4cb3-9aea-fd467613cfcd" />
-<img width="1910" height="827" alt="image" src="https://github.com/user-attachments/assets/d6218600-4df9-4dd1-ad6c-c4a92c490084" />
-
-
-
 
 ## GraphSAGE と GAT の比較
 
@@ -27,6 +18,117 @@ GraphSAGE に加えて GAT（Graph Attention Network）も選択できる。Web 
 | 推奨用途 | 既定・安定運用 | 比較実験・関係の重要度を見たい場合 |
 
 このプロジェクトでは `GraphSAGE` を既定値にし、`GAT` は比較実験用として追加している。
+
+## 処理フロー
+
+LLMGraphRAG は、入力された文章をグラフとして保存し、そのグラフ構造を GraphSAGE / GAT で埋め込みに変換してから、質問に関係する部分だけを LLM に渡して回答する。
+
+```mermaid
+flowchart TD
+    A["文章入力"] --> B["チャンク分割<br/>長い文章を小さな単位に分割"]
+    B --> C["エンティティ抽出<br/>各チャンクから重要そうな語を抽出"]
+    C --> D["Neo4j に保存<br/>Document / Chunk / Entity をグラフとして保存"]
+    D --> E["GraphSAGE / GAT で構造埋め込み<br/>グラフ構造をベクトル化"]
+    E --> F["質問入力"]
+    F --> G["関連ノード・チャンク検索"]
+    G --> H["検索結果を LLM へ渡す<br/>全文ではなく関連部分だけを渡す"]
+    H --> I["回答生成<br/>LLM が回答する"]
+```
+
+### 1. 文章入力
+
+ユーザーがドキュメント追加フォームに文章を貼り付ける。
+
+### 2. チャンク分割
+
+長い文章を、検索や回答生成で扱いやすい小さな単位に分割する。
+
+```text
+Document
+  ├─ Chunk 1
+  ├─ Chunk 2
+  └─ Chunk 3
+```
+
+### 3. エンティティ抽出
+
+各チャンクから重要そうな語を抽出する。
+
+例:
+
+```text
+東京都
+新宿区
+東京湾
+人口密度
+ラグビーユニオン
+ラグビーリーグ
+```
+
+### 4. Neo4j にグラフとして保存
+
+文書、チャンク、エンティティを Neo4j にノードとリレーションとして保存する。
+
+```text
+(:Document)
+  -[:RELATES {relation: "has_chunk"}]->
+(:Chunk)
+  -[:RELATES {relation: "mentions"}]->
+(:Entity)
+```
+
+### 5. GraphSAGE / GAT で構造埋め込み
+
+保存されたグラフ構造を GNN でベクトル化する。
+
+| モデル | 集約方法 |
+|---|---|
+| GraphSAGE | 近傍ノードを平均的に集約 |
+| GAT | 近傍ごとに重要度をつけて集約 |
+
+### 6. 質問入力
+
+ユーザーがチャット欄に質問を入力する。
+
+例:
+
+```text
+東京都とは？
+ラグビーユニオンは何人制ですか？
+```
+
+### 7. 関連ノード・チャンク検索
+
+質問文を検索クエリとして、関連する情報を探す。
+
+検索対象:
+
+- エンティティ名に一致するもの
+- チャンク本文に一致するもの
+- グラフ構造的に近いもの
+- `mentions` でつながるチャンク
+
+### 8. 検索結果を LLM へ渡す
+
+LLM には全文を渡さず、検索で見つかった関連部分だけを渡す。
+
+```text
+検索結果:
+- 東京都 chunk 1
+  本文: 東京都は日本の関東地方に位置する都...
+
+質問:
+東京都とは？
+```
+
+### 9. 回答生成
+
+LLM が検索結果をもとに回答する。
+
+```text
+東京都は、日本の関東地方に位置する都です。
+都庁所在地は新宿区で、区部・多摩地域・島嶼部からなります。
+```
 
 ## なぜ GraphSAGE か
 
