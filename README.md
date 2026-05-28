@@ -1,10 +1,21 @@
-# LLMGraphRAG
+# LLMHybridGraphRAG
 
-第2世代 GraphRAG（GraphRAG Local LLM）に **GraphSAGE による inductive な構造埋め込み** を組み込んだ拡張プロジェクト。
+第2世代 HybridGraphRAG（HybridyGraphRAG Local LLM）に **GraphSAGE による inductive な構造埋め込み** を組み込んだ拡張プロジェクト。
 
 知識グラフのエンティティを「テキストの意味」だけでなく「グラフ構造上の位置」も反映したベクトルで表現し、ハイブリッド検索・リンク予測（グラフ補完）を実現する。
 
 GraphSAGE に加えて GAT（Graph Attention Network）も選択できる。Web UI のセットアップ欄で `GraphSAGE` / `GAT` を切り替えて学習できる。
+■WEB画面
+
+<img width="1891" height="810" alt="image" src="https://github.com/user-attachments/assets/5a0ec07c-5f61-4c86-b9e2-04e39311f6b2" />
+<img width="1909" height="828" alt="image" src="https://github.com/user-attachments/assets/a7d5e658-3228-4be7-996f-5e179895148b" />
+<img width="1423" height="813" alt="image" src="https://github.com/user-attachments/assets/0dba4397-6078-4b2b-b6de-62a08c02e7e2" />
+<img width="1209" height="818" alt="image" src="https://github.com/user-attachments/assets/1df3bbfd-ed5e-4602-8857-aa889b1c71b3" />
+<img width="1586" height="821" alt="image" src="https://github.com/user-attachments/assets/03185c7a-6dc1-4a9a-81d0-aa496cc25a68" />
+
+
+
+
 
 ## GraphSAGE と GAT の比較
 
