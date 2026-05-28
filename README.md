@@ -5,6 +5,15 @@
 知識グラフのエンティティを「テキストの意味」だけでなく「グラフ構造上の位置」も反映したベクトルで表現し、ハイブリッド検索・リンク予測（グラフ補完）を実現する。
 
 GraphSAGE に加えて GAT（Graph Attention Network）も選択できる。Web UI のセットアップ欄で `GraphSAGE` / `GAT` を切り替えて学習できる。
+■WEB画面
+<img width="1896" height="820" alt="image" src="https://github.com/user-attachments/assets/7f2d7843-a201-4700-876b-7ca8bfaf42a1" />
+<img width="1912" height="819" alt="image" src="https://github.com/user-attachments/assets/a51f4114-a1ad-4e16-b197-c21a58e8f4f7" />
+<img width="1913" height="834" alt="image" src="https://github.com/user-attachments/assets/8d0d141d-a41f-4251-8095-400a71f5316e" />
+<img width="1903" height="828" alt="image" src="https://github.com/user-attachments/assets/6a293e26-c490-4cb3-9aea-fd467613cfcd" />
+<img width="1910" height="827" alt="image" src="https://github.com/user-attachments/assets/d6218600-4df9-4dd1-ad6c-c4a92c490084" />
+
+
+
 
 ## GraphSAGE と GAT の比較
 
