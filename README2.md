@@ -1,4 +1,4 @@
-# README 追加セクション（「LangGraph チャット層」の直後に挿入推奨）
+# README 追加セクション（「LangGraph チャット層」直後）
 
 ---
 
